@@ -15300,6 +15300,8 @@ const msOffset = Date.now() - offsetFromDate;
 const dayOffset = msOffset / 1000 / 60 / 60 / 24;
 const targetWord = targetWords[Math.floor(dayOffset)];
 
+startInteraction();
+
 function startInteraction() {
   document.addEventListener("click", handleMouseClick);
   document.addEventListener("keydown", handleKeyPress);
@@ -15373,7 +15375,7 @@ function submitGuess() {
     return word + tile.dataset.letter;
   }, "");
 
-  if (dictionary.includes(guess)) {
+  if (!dictionary.includes(guess)) {
     showAlert("Not in word list");
     shakeTiles(activeTiles);
     return;
@@ -15387,7 +15389,7 @@ function submitGuess() {
 // we only do a 90deg flip, change the color of the tile and then flip it back to its original position
 function flipTile(tile, index, array, guess) {
   const letter = tile.dataset.letter;
-  const key = keyboard.querySelector(`[data-key="${letter}i]`);
+  const key = keyboard.querySelector(`[data-key="${letter}"i]`);
   setTimeout(() => {
     tile.classList.add("flip");
   }, (index * FLIP_ANIMATION_DURATION) / 2);
@@ -15476,12 +15478,12 @@ function checkWinLose(guess, tiles) {
 function danceTiles(tiles) {
   tiles.forEach((tile, index) => {
     setTimeout(() => {
-      tile.classList.add("shake");
+      tile.classList.add("dance");
       // the class gets added on every submit and removed after the animation ends
       tile.addEventListener(
         "animationend",
         () => {
-          tile.classList.remove("shake");
+          tile.classList.remove("dance");
         },
         { once: true }
       );
